@@ -715,6 +715,23 @@ with aba2:
             )
     st.plotly_chart(fig, use_container_width=True)
     
+    numero_beneficiarios = st.number_input('Informe o número de beneficiários que deseja visualizar', min_value=1, value=5)
+    df_app_beneficiarios = (
+        df_app.groupby('Nome Contrapartida')['Valor BRL']
+        .sum()
+        .reset_index()
+        .nlargest(numero_beneficiarios, 'Valor BRL')
+    )
+    df_app_beneficiarios["Valor Formatado"] = df_app_beneficiarios["Valor BRL"].apply(lambda x: formata_numero(x,"R$"))
+    fig = px.bar(
+                df_app_beneficiarios,
+                x="Nome Contrapartida",
+                y="Valor BRL",
+                text = "Valor Formatado",
+                title=f'Distribuição pelo top {numero_beneficiarios} bebeficiários'
+            )
+    st.plotly_chart(fig, use_container_width=True)
+    
 with aba3:
     st.title("Análise dos Agentes")
     
