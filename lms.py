@@ -636,10 +636,10 @@ df_app = df_app.rename(columns={
     "PurchasingDocument":"Pedido"
     })
 
-df_app["Data2"] = pd.to_datetime(df_app["Data Registro"], errors="coerce")
+df_app["Data2"] = pd.to_datetime(df_app["Data Registro"], errors="coerce", dayfirst=True)
 df_app = df_app.sort_values(by= "Data2", ascending = False)
 df_app["Ano"] = df_app["Data2"].dt.year.fillna(df_app["Data Documento"].str[-4:]).astype("int").astype(str)
-df_app["Mes"] = df_app["Data2"].dt.month.fillna(df_app["Data Documento"].str[-7:-5]).astype("int").astype(str)
+df_app["Mes"] = df_app["Data2"].dt.month.fillna(df_app["Data Documento"].str[3:-5]).astype("int").astype(str)
 df_app["Ano"] = df_app["Ano"].replace({"2202":"2022"})
 
 lista_pedidos = ["Todos"] + sorted(list(df_app["Pedido"].str.strip().unique()))
